@@ -51,6 +51,7 @@ def str2unicode(s: str) -> str:
     return ''.join(s)
 
 def check_and_filter_in_out_files_folder(files: list[str]) -> list[int]:
+    assert len(files) % 2 == 0 # in pairs
     out = [ ]
 
     # check files format
