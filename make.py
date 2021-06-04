@@ -44,7 +44,8 @@ if __name__ == '__main__':
     main_targets = [ ]
     folders_to_create = [ ]
 
-    assert len(os.listdir(UPLOAD_DIR)) == 0, f'{UPLOAD_DIR} not clear'
+    assert len(os.listdir(UPLOAD_DIR)) == 0, \
+        f"target folder '{UPLOAD_DIR}' not empty"
 
     for case_filename in get_case_list():   
         no = case_filename.split('.')[0]
