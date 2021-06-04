@@ -3,6 +3,7 @@
 from __future__ import annotations # Pre 3.9
 import argparse
 import os
+import os.path
 import abbrs
 
 
@@ -96,8 +97,8 @@ def make_test_case_conf(testcase_home: str) -> str:
 def make_sample(sample_home: str) -> str:
     return make_in_out_files_configuration(os.listdir(sample_home), '''
     {{
-        "input": "{}",
-        "output": "{}"
+        "input": "{0}",
+        "output": "{0}"
     }}
     ''')
 
@@ -137,7 +138,8 @@ if __name__ == '__main__':
         "answers": [],
         "test_case_score": [ %s ],
         "sample": [ %s ]
-    }''' % ('PP-' + args.filename.split('.')[0], str2unicode(title),
+    }''' % ('PP-' + os.path.basename(args.filename).split('.')[0],
+            str2unicode(title),
             str2unicode('\n'.join(description)),
             S1, S1, str2unicode('刷题系统'),
             make_test_case_conf(args.testcase_home),

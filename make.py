@@ -41,13 +41,29 @@ def is_case_filename_valid(filename: str) -> bool:
 def get_case_list() -> list[str]:
     return [ i for i in os.listdir(CASES_DIR) if is_case_filename_valid(i) ]
 
+def assert_folder_empty(folder: str) -> None:
+    assert len(os.listdir(folder)) == 0, f"target folder '{folder}' not empty"
+
+def make_in_out_files(folder: str, num: int) -> list[str]:
+    targets = [ ]
+
+    for k in range(num):
+        j = k + 1
+        targets.append(f'{folder}/{j}.in')
+        targets.append(f'{folder}/{j}.out')
+        add_target(f'{folder}/{j}.in', '',
+                   f'./make_input.py {input_dat_count} > {folder}/{j}.in')
+        add_target(f'{folder}/{j}.out', f'{folder}/{j}.in',
+                   f'python3 {case_filename_full} < {folder}/{j}.in > {folder}/{j}.out')
+
+    return targets
+
 if __name__ == '__main__':
     main_targets = [ ]
     folders_to_create = [ ]
 
-    assert len(os.listdir(UPLOAD_DIR)) == 0, \
-        f"target folder '{UPLOAD_DIR}' not empty"
-
+    assert_folder_empty(UPLOAD_DIR)
+    
     for case_filename in get_case_list():   
         no = case_filename.split('.')[0]
         case_filename_full = f'{CASES_DIR}/{case_filename}'
@@ -63,15 +79,9 @@ if __name__ == '__main__':
         folders_to_create += [ home, f'{home}/testcase/', sample_home ]
 
         # .in & .out
-        for k in range(TESTCASE_COUNT):
-            j = k + 1
-            targets.append(f'{home}/testcase/{j}.in')
-            targets.append(f'{home}/testcase/{j}.out')
-            add_target(f'{home}/testcase/{j}.in', '',
-                       f'./make_input.py {input_dat_count} > {home}/testcase/{j}.in')
-            add_target(f'{home}/testcase/{j}.out', f'{home}/testcase/{j}.in',
-                       f'python3 {case_filename_full} < {home}/testcase/{j}.in > {home}/testcase/{j}.out')
-       
+        targets += make_in_out_files(f'{home}/testcase', TESTCASE_COUNT)
+        targets += make_in_out_files(sample_home, SAMPLE_COUNT)
+        
         # problem.json
         add_target(f'{home}/problem.json', '',
             f'./make_problem_json.py {case_filename_full} {home}/testcase {sample_home} > {home}/problem.json')
