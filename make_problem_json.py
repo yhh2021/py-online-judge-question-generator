@@ -66,7 +66,7 @@ def check_and_filter_in_out_files_folder(files: list[str]) -> list[int]:
         if ext == 'in':
             assert f'{no}.out' in files
             out.append(no)
-       else:
+        else:
             assert ext == 'out' # double-check
             assert f'{no}.in' in files
 
@@ -137,8 +137,8 @@ if __name__ == '__main__':
         "answers": [],
         "test_case_score": [ %s ],
         "sample": [ %s ]
-    }''' % ('PP-' + filename.split('.')[0], str2unicode(title),
-            '\n'.join(description),
+    }''' % ('PP-' + args.filename.split('.')[0], str2unicode(title),
+            str2unicode('\n'.join(description)),
             S1, S1, str2unicode('刷题系统'),
             make_test_case_conf(args.testcase_home),
             make_sample(args.sample_home)))
