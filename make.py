@@ -9,6 +9,7 @@ SAMPLE_COUNT = 3
 TESTCASE_COUNT = 5
 UPLOAD_DIR = 'upload'
 SAMPLE_DIR = 'sample'
+CASES_DIR = 'cases'
 makefile = [ ]
 
 def add_target(name: str, dependencies: Union[ list[str], str ],
@@ -38,7 +39,7 @@ def is_case_filename_valid(filename: str) -> bool:
     return True
 
 def get_case_list() -> list[str]:
-    return [ i for i in os.listdir() if is_case_filename_valid(i) ]
+    return [ i for i in os.listdir(CASES_DIR) if is_case_filename_valid(i) ]
 
 if __name__ == '__main__':
     main_targets = [ ]
@@ -49,13 +50,14 @@ if __name__ == '__main__':
 
     for case_filename in get_case_list():   
         no = case_filename.split('.')[0]
+        case_filename_full = f'{CASES_DIR}/{case_filename}'
         target = f'pp{no}'
         main_targets.append(target)
         count = len(main_targets)
         home = f'{UPLOAD_DIR}/{count}'
         sample_home = f'{SAMPLE_DIR}/{count}'
         targets = [ ]
-        input_dat_count = get_case_input_dat_count(case_filename)
+        input_dat_count = get_case_input_dat_count(case_filename_full)
   
         # folders
         folders_to_create += [ home, f'{home}/testcase/', sample_home ]
@@ -68,11 +70,11 @@ if __name__ == '__main__':
             add_target(f'{home}/testcase/{j}.in', '',
                        f'./make_input.py {input_dat_count} > {home}/testcase/{j}.in')
             add_target(f'{home}/testcase/{j}.out', f'{home}/testcase/{j}.in',
-                       f'python3 {case_filename} < {home}/testcase/{j}.in > {home}/testcase/{j}.out')
+                       f'python3 {case_filename_full} < {home}/testcase/{j}.in > {home}/testcase/{j}.out')
        
         # problem.json
         add_target(f'{home}/problem.json', '',
-            f'./make_problem_json.py {case_filename} {home}/testcase {sample_home} > {home}/problem.json')
+            f'./make_problem_json.py {case_filename_full} {home}/testcase {sample_home} > {home}/problem.json')
         targets.append(f'{home}/problem.json')
 
         # master target
