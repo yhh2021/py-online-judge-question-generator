@@ -13,18 +13,18 @@ Format:
 ```
 ProblemSet.zip
 |-1
-    |–problem.json
-    |–testcase
-        |—1.in
-        |—1.out
-        |…
+    |-problem.json
+    |-testcase
+        |-1.in
+        |-1.out
+        |...
 |-2
-    |–problem.json
-    |–testcase
-        |—1.in
-        |—1.out
-        |…
-|…
+    |-problem.json
+    |-testcase
+        |-1.in
+        |-1.out
+        |...
+|...
 ```
 
 https://hub.fastgit.org/jackfrued/Python-100-Days/tree/master/Day01-15
